@@ -1,27 +1,13 @@
 import { Injectable } from '@angular/core';
+import { PatientDetails_DTO } from '../dtos/patientDetails.dto';
 
-interface PatientDetails {
-  hospitalCode: number;
-  patientId: number;
-  patientName: string;
-  reportId: number;
-  age: number;
-  gender: 'Male' | 'Female' | 'Other';
-  address: string;
-  contact: string;
-  dateOfBirth: string;
-  maritalStatus: 'Single' | 'Married' | 'Divorced' | 'Widowed';
-  emergencyContact: string;
-  bloodType: 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
-  nationality: string;
-  medicalHistory: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private patientList: PatientDetails[] = [
+  private patientList: PatientDetails_DTO[] = [
     { hospitalCode: 101001, patientId: 100001, patientName: 'John Doe', reportId: 1, age: 30, gender: 'Male', address: '123 Main St, Kathmandu, Nepal', contact: '+977 9841234567', dateOfBirth: '1995-03-15', maritalStatus: 'Single', emergencyContact: '+977 9807654321', bloodType: 'O+', nationality: 'Nepalese', medicalHistory: 'No significant history' },
     { hospitalCode: 101002, patientId: 100002, patientName: 'Jane Smith', reportId: 2, age: 28, gender: 'Female', address: '456 Elm St, Pokhara, Nepal', contact: '+977 9812345678', dateOfBirth: '1997-07-22', maritalStatus: 'Married', emergencyContact: '+977 9801122334', bloodType: 'A-', nationality: 'Nepalese', medicalHistory: 'History of asthma' },
     { hospitalCode: 101003, patientId: 100003, patientName: 'Alice Johnson', reportId: 3, age: 35, gender: 'Female', address: '789 Pine St, Lalitpur, Nepal', contact: '+977 9823456789', dateOfBirth: '1990-10-10', maritalStatus: 'Divorced', emergencyContact: '+977 9832233445', bloodType: 'B+', nationality: 'Nepalese', medicalHistory: 'High blood pressure' },

@@ -1,17 +1,13 @@
 import { Injectable } from '@angular/core';
+import { DoctorDetails_DTO } from '../dtos/doctorDetails.dto';
 
-interface DoctorDetails {
-  doctorName: string;
-  nmcNumber: string;
-  department: string;
-  digitalSignature: string;
-}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DoctorService {
-  private doctorList: DoctorDetails[] = [
+  private doctorList: DoctorDetails_DTO[] = [
     { doctorName: 'Dr. Smith, MD', nmcNumber: 'NMC123456', department: 'Radiology', digitalSignature: 'assets/signatures/signature1.png' },
     { doctorName: 'Dr. Patel, MD', nmcNumber: 'NMC654321', department: 'Ultrasound', digitalSignature: 'assets/signatures/signature2.png' },
     { doctorName: 'Dr. Kim, MD', nmcNumber: 'NMC789012', department: 'Pathology', digitalSignature: 'assets/signatures/signature3.png' },
@@ -25,7 +21,7 @@ export class DoctorService {
     return this.doctorList;
   }
 
-  getDoctorByName(doctorName: string): DoctorDetails | undefined {
+  getDoctorByName(doctorName: string): DoctorDetails_DTO | undefined {
     return this.doctorList.find(doctor => doctor.doctorName === doctorName);
   }
 }

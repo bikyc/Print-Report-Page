@@ -10,12 +10,12 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let report of patientList">
-      <td>{{ report.hospitalCode }}</td>
-      <td>{{ report.patientId }}</td>
-      <td>{{ report.patientName }}</td>
-      <td>{{ getReportName(report.reportId) }}</td>
-      <td><button (click)="ViewReport(report)">View Report</button></td>
+    <tr *ngFor="let patient of patientList">
+      <td>{{ patient.hospitalCode }}</td>
+      <td>{{ patient.patientId }}</td>
+      <td>{{ patient.patientName }}</td>
+      <td>{{ getReportName(patient.reportId) }}</td>
+      <td><button (click)="ViewReport(patient)">View Report</button></td>
     </tr>
   </tbody>
 </table>
@@ -23,54 +23,75 @@
 <div *ngIf="selectedReport" class="popup">
   <div class="popup-content">
     <span class="close" (click)="closePopup()">&times;</span>
-    <h2>Report for {{ selectedPatient.patientName }} ({{ selectedReport.reportName }})</h2>
+    <h2>Report for {{ selectedPatient?.patientName }} ({{ selectedReport?.reportName }})</h2>
+    <div>
+      <input type="checkbox" [(ngModel)]="showHeader">
+      <label for="showHeader">Display Header</label>
+    </div>
     <div id="printableArea">
-
+      <div *ngIf="showHeader" class="header-container">
+        <img src="assets/header/hospital-header.jpg" alt="Hospital Header" class="header-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <div class="header-placeholder" style="display:none;">Header Image Not Found</div>
+      </div>
       <div class="patient-info">
         <div class="patient-info-left">
-          <p><strong>Patient Name:</strong> {{ selectedPatient.patientName }}</p>
-          <p><strong>Age:</strong> {{ selectedPatient.age }} years</p>
-          <p><strong>Gender:</strong> {{ selectedPatient.gender }}</p>
+          <p><strong>Patient Name:</strong> {{ selectedPatient?.patientName }}</p>
+          <p><strong>Age:</strong> {{ selectedPatient?.age }} years</p>
+          <p><strong>Gender:</strong> {{ selectedPatient?.gender }}</p>
         </div>
         <div class="patient-info-right">
-          <p><strong>Contact:</strong> {{ selectedPatient.contact }}</p>
-          <p><strong>Address:</strong> {{ selectedPatient.address }}</p>
-          <p><strong>Date of Birth:</strong> {{ selectedPatient.dateOfBirth }}</p>
+          <p><strong>Contact:</strong> {{ selectedPatient?.contact }}</p>
+          <p><strong>Address:</strong> {{ selectedPatient?.address }}</p>
+          <p><strong>Date of Birth:</strong> {{ selectedPatient?.dateOfBirth }}</p>
         </div>
       </div>
-      <hr>
-      <div class="report-details">
-        <p><strong>Test Performed On:</strong> {{ selectedReport.reportData.testDetails.testPerformedOn }}</p>
-        <p><strong>Referred By:</strong> {{ selectedReport.reportData.testDetails.referredBy }}</p>
-        <p><strong>Clinical History:</strong> {{ selectedReport.reportData.clinicalHistory }}</p>
-        <p><strong>Procedure Details:</strong> {{ selectedReport.reportData.procedureDetails }}</p>
+      <div class="Action no-print">
+        <button (click)="editReport()">Edit Report</button>
+      </div>
+      <div class="report-details" *ngIf="parsedReportData">
+        <p><strong>Test Performed On:</strong> <span *ngIf="!isEditing">{{ parsedReportData.testDetails.testPerformedOn }}</span><input *ngIf="isEditing" [(ngModel)]="parsedReportData.testDetails.testPerformedOn"></p>
+        <p><strong>Referred By:</strong> <span *ngIf="!isEditing">{{ parsedReportData.testDetails.referredBy }}</span><input *ngIf="isEditing" [(ngModel)]="parsedReportData.testDetails.referredBy"></p>
+        <p><strong>Clinical History:</strong> <span *ngIf="!isEditing">{{ parsedReportData.clinicalHistory }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.clinicalHistory"></textarea></p>
+        <p><strong>Procedure Details:</strong> <span *ngIf="!isEditing">{{ parsedReportData.procedureDetails }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.procedureDetails"></textarea></p>
         <p><strong>Findings:</strong></p>
         <ul>
-          <li *ngFor="let key of objectKeys(selectedReport.reportData.findings)">
-            <strong>{{ key }}:</strong> {{ selectedReport.reportData.findings[key] }}
+          <li *ngFor="let key of objectKeys(parsedReportData.findings)">
+            <strong>{{ key }}:</strong> <span *ngIf="!isEditing">{{ parsedReportData.findings[key] }}</span><input *ngIf="isEditing" [(ngModel)]="parsedReportData.findings[key]">
           </li>
         </ul>
-        <p><strong>Impression:</strong> {{ selectedReport.reportData.impression }}</p>
-        <p><strong>Recommendations:</strong> {{ selectedReport.reportData.recommendations }}</p>
+        <p><strong>Impression:</strong> <span *ngIf="!isEditing">{{ parsedReportData.impression }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.impression"></textarea></p>
+        <p><strong>Recommendations:</strong> <span *ngIf="!isEditing">{{ parsedReportData.recommendations }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.recommendations"></textarea></p>
+        <p><strong>Additional Notes:</strong> <span *ngIf="!isEditing">{{ parsedReportData.additionalNotes }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.additionalNotes"></textarea></p>
+        <p><strong>To Do:</strong> <span *ngIf="!isEditing">{{ parsedReportData.toDo }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.toDo"></textarea></p>
+        <p><strong>To Not Do:</strong> <span *ngIf="!isEditing">{{ parsedReportData.toNotDo }}</span><textarea *ngIf="isEditing" [(ngModel)]="parsedReportData.toNotDo"></textarea></p>
       </div>
-      <hr>
-      <div class="doctor-info-container">
-        <div class="doctor-info" *ngFor="let doctor of selectedDoctors; let i = index">
-          <p><img [src]="doctor.digitalSignature" class="signature-img"></p>
+      <div class="doctor-info-container" [ngClass]="{'one-doctor': selectedDoctors.length === 1, 'two-doctors': selectedDoctors.length === 2, 'three-doctors': selectedDoctors.length === 3}">
+        <div class="doctor-info" *ngFor="let doctor of selectedDoctors">
+          <p><img [src]="doctor.digitalSignature" class="signature-img" *ngIf="doctor.digitalSignature"></p>
           <p><strong>Doctor:</strong> {{ doctor.doctorName }}</p>
           <p><strong>NMC No:</strong> {{ doctor.nmcNumber }}</p>
           <p><strong>Dept:</strong> {{ doctor.department }}</p>
-          <button (click)="removeDoctor(i)">Remove</button>
         </div>
       </div>
+      <div class="footer-note">
+        <input type="checkbox" [(ngModel)]="selectedReport?.footerNote.isChecked" class="no-print">
+        <span>{{ selectedReport?.footerNote.footerNote }}</span>
+      </div>
     </div>
-    <div class="footer">
-      <label for="doctorSelect">Select Doctor:</label>
-      <select id="doctorSelect" (change)="addDoctor($event)">
-        <option value="" disabled selected>Select a doctor</option>
-        <option *ngFor="let doctor of doctorList" [value]="doctor.doctorName">{{ doctor.doctorName }}</option>
-      </select>
-      <button (click)="printReport()">Print</button>
+    <div class="footer no-print">
+      <label for="doctorSelect">Select Doctors:</label>
+      <ng-multiselect-dropdown
+        [placeholder]="'Select Doctors'"
+        [data]="doctorList"
+        [(ngModel)]="dropdownSelectedDoctors"
+        [settings]="dropdownSettings"
+        (onSelect)="onDoctorSelect($event)"
+        (onDeSelect)="onDoctorDeSelect($event)"
+        (onSelectAll)="onSelectAll($event)"
+        (onDeSelectAll)="onDeSelectAll($event)">
+      </ng-multiselect-dropdown>
+      <button *ngIf="!isEditing" (click)="printReport()">Print</button>
+      <button *ngIf="isEditing" (click)="saveReport()">Save</button>
     </div>
   </div>
 </div>
