@@ -2,26 +2,57 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.6.
 
-## Development server
+## Purpose of the Project
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The `PrintReportPage` project is an Angular application designed to manage and display patient reports. It allows users to view detailed reports for patients, add and remove doctors associated with the reports, and print the reports.
 
-## Code scaffolding
+## Prerequisites
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Node.js and npm should be installed on your machine. You can download them from [nodejs.org](https://nodejs.org/).
 
-## Build
+## Setting Up the Project
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. **Clone the Repository**: Clone the project repository to your local machine using:
+    ```sh
+    git clone https://github.com/bikyc/Print-Report-Page
+    ```
+    Navigate to the project directory:
+    ```sh
+    cd print-report-page
+    ```
 
-## Running unit tests
+2. **Install Dependencies**: Install the project dependencies by running:
+    ```sh
+    npm install
+    ```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Running the Project
 
-## Running end-to-end tests
+1. **Development Server**: Start the development server by running:
+    ```sh
+    npm start
+    ```
+    Navigate to `http://localhost:4200/` in your web browser. The application will automatically reload if you change any of the source files.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+2. **Build the Project**: To build the project for production, run:
+    ```sh
+    npm run build
+    ```
+    The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build:
+    ```sh
+    ng build --prod
+    ```
 
-## Further help
+3. **Running Unit Tests**: Execute the unit tests via Karma by running:
+    ```sh
+    npm test
+    ```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+4. **Running End-to-End Tests**: Execute the end-to-end tests via Protractor by running:
+    ```sh
+    npm run e2e
+    ```
+
+## Further Help
+
+To get more help on the Angular CLI, use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
