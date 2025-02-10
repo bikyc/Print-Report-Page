@@ -8,7 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "npx ngcc --properties es2015 browser module main"
+    "scripts": {
+      "start": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve --port 4300"
+    }
   },
   "private": true,
   "dependencies": {
