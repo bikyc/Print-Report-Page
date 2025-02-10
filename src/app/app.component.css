@@ -78,7 +78,7 @@ button:hover {
   display: flex;
   justify-content: space-between;
   background-color: #f1f1f1;
-  margin-bottom: 20px;
+  margin-bottom: 2px;
   border-radius: 5px;
   border: 1px solid black;
 }
@@ -86,7 +86,8 @@ button:hover {
 .patient-info-left,
 .patient-info-right {
   flex: 1;
-  padding: 0 10px 0 10px;
+  padding: 0 10px;
+  text-align: left;
 }
 
 .report-details {
@@ -113,6 +114,7 @@ button:hover {
   width: 100px;
   height: 50px;
   object-fit: contain;
+  margin-top: 10px; /* Adjusted to ensure it stays within the container */
 }
 
 .footer {
@@ -120,6 +122,46 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.selectdoctor-action-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.doctorselect-container {
+  display: flex;
+  align-items: center;
+  flex: 0 0 300px; /* Reduced width */
+}
+
+.doctorselect-container label {
+  margin-right: 10px;
+}
+
+.doctorselect-container ng-multiselect-dropdown {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.action-container {
+  display: flex;
+  align-items: center;
+}
+
+.action-container button {
+  padding: 6px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.action-container button:hover {
+  background-color: #45a049;
 }
 
 #doctorSelect {
@@ -173,7 +215,6 @@ button:hover {
 }
 
 .header-container {
-  border: 1px solid #ddd;
   padding: 10px;
   text-align: center;
 }
@@ -196,8 +237,62 @@ button:hover {
   border: 1px dashed #ddd;
 }
 
+.footer-container {
+  margin-top: 20px;
+  text-align: center;
+
+  width: 100%;
+  background-color: white;
+}
+
+.no-print {
+  display: block;
+}
+
 @media print {
-  .popup, .popup-content, .close, .footer, .header-container, .no-print {
+  .header-container, .footer-container {
+    display: block !important;
+  }
+  .selectdoctor-action-container {
     display: none;
   }
+  thead {
+    display: table-header-group;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+  }
+  tfoot {
+    display: table-footer-group;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+  }
+  tbody {
+    display: table-row-group;
+    padding-top: 60px; /* Adjust this value based on the height of the thead */
+    padding-bottom: 60px; /* Adjust this value based on the height of the tfoot */
+  }
+  .no-print {
+    display: none;
+  }
+}
+
+.custom-table {
+  width: 100%;
+  border: none;
+}
+
+.custom-table th, .custom-table td {
+  border: none;
+}
+
+.custom-table tr:hover {
+  background-color: transparent;
+}
+
+.custom-header {
+  padding: 0;
 }

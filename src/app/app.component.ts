@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
   dropdownSettings = {};
   isEditing: boolean = false;
   showHeader: boolean = true;
+  displayHeaderOnAllPages: boolean = false;
+  displayFooterOnAllPages: boolean = false;
 
   constructor(
     private reportService: ReportService,
@@ -99,164 +101,197 @@ export class AppComponent implements OnInit {
         <head>
           <title>Print Report</title>
           <style>
-            table {
-              border-collapse: collapse;
-              width: 100%;
-              margin: 20px 0;
-            }
-            th, td {
-              padding: 12px;
-              border: 1px solid #ddd;
-              text-align: left;
-            }
-            th {
-              background-color: #f2f2f2;
-            }
-            tr:nth-child(even) {
-              background-color: #f9f9f9;
-            }
-            tr:hover {
-              background-color: #f1f1f1;
-            }
-            button {
-              padding: 6px 12px;
-              background-color: #4CAF50;
-              color: white;
-              border: none;
-              cursor: pointer;
-            }
-            button:hover {
-              background-color: #45a049;
-            }
-            .popup {
-              position: fixed;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background-color: rgba(0, 0, 0, 0.5);
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              overflow: hidden;
-            }
-            .popup-content {
-              background-color: white;
-              padding: 20px;
-              border-radius: 5px;
-              width: 98%;
-              max-width: 1000px;
-              position: relative;
-              max-height: 90%;
-              overflow-y: auto;
-            }
-            .close {
-              position: absolute;
-              top: 10px;
-              right: 10px;
-              font-size: 24px;
-              cursor: pointer;
-              background-color: red;
-              color: white;
-              border-radius: 50%;
-              width: 30px;
-              height: 30px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            }
-            .patient-info {
-              display: flex;
-              justify-content: space-between;
-              background-color: #f1f1f1;
-              margin-bottom: 20px;
-              border-radius: 5px;
-              border: 1px solid black;
-            }
-            .patient-info-left,
-            .patient-info-right {
-              flex: 1;
-              padding: 0 10px 0 10px;
-            }
-            .report-details {
-              margin-top: 20px;
-            }
-            .scrollable {
-              max-height: 400px;
-              overflow-y: auto;
-            }
-            .doctor-info-container {
-              display: flex;
-              flex-wrap: wrap;
-              gap: 20px;
-              justify-content: space-between;
-              background-color: #f8f8f8;
-            }
-            .doctor-info {
-              flex: 1 1 100%;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              margin-top: 20px;
-            }
-            .signature-img {
-              width: 100px;
-              height: 50px;
-              object-fit: contain;
-            }
-            .footer {
-              margin-top: 20px;
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-            }
-            #doctorSelect {
-              padding: 6px;
-              font-size: 16px;
-            }
-            .doctor-info p {
-              margin: 2px 0;
-            }
-            @media (min-width: 600px) {
-              .doctor-info {
-                flex: 1 1 calc(50% - 20px);
+            @media print {
+              table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 20px 0;
               }
-            }
-            @media (min-width: 900px) {
-              .doctor-info {
-                flex: 1 1 calc(33.333% - 20px);
+              th, td {
+                padding: 12px;
+                border: 1px solid #ddd;
+                text-align: left;
               }
-            }
-            .doctor-info-container.one-doctor .doctor-info {
-              justify-content: center;
-              align-items: flex-start;
-            }
-            .doctor-info-container.two-doctors .doctor-info:nth-child(1) {
-              justify-content: center;
-            }
-            .doctor-info-container.two-doctors .doctor-info:nth-child(2) {
-              justify-content: flex-end;
-            }
-            .doctor-info-container.three-doctors .doctor-info:nth-child(1) {
-              justify-content: flex-start;
-            }
-            .doctor-info-container.three-doctors .doctor-info:nth-child(2) {
-              justify-content center;
-            }
-            .doctor-info-container.three-doctors .doctor-info:nth-child(3) {
-              justify-content: flex-end;
-            }
-            .footer-note {
-              margin-top: 10px;
-            }
-            .no-print {
-              display: none;
+              th {
+                background-color: #f2f2f2;
+              }
+              tr:nth-child(even) {
+                background-color: #f9f9f9;
+              }
+              tr:hover {
+                background-color: #f1f1f1;
+              }
+              button {
+                padding: 6px 12px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                cursor: pointer;
+              }
+              button:hover {
+                background-color: #45a049;
+              }
+              .custom-table {
+                width: 100%;
+                border: none;
+              }
+              .custom-table th, .custom-table td {
+                border: none;
+              }
+              .custom-table tr:hover {
+                background-color: transparent;
+              }
+              .custom-header {
+                padding: 0;
+              }
+              .patient-info {
+                display: flex;
+                justify-content: space-between;
+                background-color: #f1f1f1;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                border: 1px solid black;
+              }
+              .patient-info-left,
+              .patient-info-right {
+                flex: 1;
+                padding: 0 10px;
+                text-align: left;
+              }
+              .report-details {
+                margin-top: 20px;
+              }
+              .scrollable {
+                max-height: 400px;
+                overflow-y: auto;
+              }
+              .doctor-info-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+                background-color: #f8f8f8;
+              }
+              .doctor-info {
+                flex: 1 1 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+              }
+              .signature-img {
+                width: 100px;
+                height: 50px;
+                object-fit: contain;
+                margin-top: 10px; /* Adjusted to ensure it stays within the container */
+              }
+              .footer {
+                margin-top: 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              }
+              .footer-container {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: white;
+              }
+              #doctorSelect {
+                padding: 6px;
+                font-size: 16px;
+              }
+              .doctor-info p {
+                margin: 2px 0;
+              }
+              @media (min-width: 600px) {
+                .doctor-info {
+                  flex: 1 1 calc(50% - 20px);
+                }
+              }
+              @media (min-width: 900px) {
+                .doctor-info {
+                  flex: 1 1 calc(33.333% - 20px);
+                }
+              }
+              .doctor-info-container.one-doctor .doctor-info {
+                justify-content: center;
+                align-items: flex-start;
+              }
+              .doctor-info-container.two-doctors .doctor-info:nth-child(1) {
+                justify-content: center;
+              }
+              .doctor-info-container.two-doctors .doctor-info:nth-child(2) {
+                justify-content: flex-end;
+              }
+              .doctor-info-container.three-doctors .doctor-info:nth-child(1) {
+                justify-content: flex-start;
+              }
+              .doctor-info-container.three-doctors .doctor-info:nth-child(2) {
+                justify-content: center;
+              }
+              .doctor-info-container.three-doctors .doctor-info:nth-child(3) {
+                justify-content: flex-end;
+              }
+              .footer-note {
+                margin-top: 10px;
+              }
+              .no-print {
+                display: none;
+              }
+              .header-container {
+                padding: 10px;
+                text-align: center;
+                width: 96%;
+              }
+              .header-img {
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+              }
+              .header-placeholder {
+                width: 100%;
+                height: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #f2f2f2;
+                color: #888;
+                font-size: 16px;
+                border: 1px dashed #ddd;
+              }
+              .Action {
+                display: none;
+              }
+              @media print {
+                .header-container, .footer-container {
+                  display: block !important;
+                }
+                .selectdoctor-action-container {
+                  display: none;
+                }
+                thead {
+                  display: table-header-group;
+                  width: 100%;
+                  background-color: white;
+                }
+                tfoot {
+                  display: table-footer-group;
+                  width: 100%;
+                  background-color: white;
+                }
+                tbody {
+                  display: table-row-group;
+                  margin-top: 100px;
+                  margin-bottom: 100px;
+                  border: none;
+                }
+              }
             }
           </style>
         </head>
         <body onload="window.print();window.close()">
           ${printContent}
-          ${this.selectedReport.footerNote.isChecked ? `<div class="footer-note">${this.selectedReport.footerNote.footerNote}</div>` : ''}
         </body>
       </html>
     `);
